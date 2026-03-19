@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Network Engineer</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05070f;
+      --bg2: #0c0f1e;
+      --bg3: #111627;
+      --border: #1e2540;
+      --border2: #2a3360;
+      --cyan: #00e5ff;
+      --cyan-dim: rgba(0, 229, 255, 0.12);
+      --green: #00ff88;
+      --green-dim: rgba(0, 255, 136, 0.10);
+      --orange: #ff6b2b;
+      --text: #dde3f5;
+      --muted: #5a6490;
+      --muted2: #3a4060;
+      --white: #ffffff;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Custom Cursor ── */
+    .cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--cyan);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: screen;
+    }
+
+    .cursor-ring {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.2s, height 0.2s;
+    }
+
+    /* ── Animated grid bg ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridShift 20s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes gridShift {
+      to {
+        background-position: 60px 60px;
+      }
+    }
+
+    /* ── Scanline overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.03) 2px,
+          rgba(0, 0, 0, 0.03) 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s, backdrop-filter 0.3s;
+    }
+
+    nav.scrolled {
+      border-color: var(--border);
+      background: rgba(5, 7, 15, 0.85);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--cyan);
+      letter-spacing: 0.05em;
+    }
+
+    .nav-logo span {
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--cyan);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
+
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s ease forwards;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background: var(--cyan);
+    }
+
+    .hero-name {
+      font-size: clamp(48px, 8vw, 100px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s ease forwards;
+    }
+
+    .hero-name .line2 {
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0, 229, 255, 0.4);
+    }
+
+    .hero-role {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s ease forwards;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-role .blink {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--green);
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0
+      }
+    }
+
+    .hero-desc {
+      max-width: 520px;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s ease forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s ease forwards;
+    }
+
+    .btn-primary {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 28px;
+      background: var(--cyan);
+      color: var(--bg);
+      border: none;
+      border-radius: 2px;
+      font-weight: 500;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 229, 255, 0.3);
+    }
+
+    .btn-ghost {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 13px 28px;
+      background: transparent;
+      color: var(--cyan);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: none;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+
+    /* hero stats */
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 64px;
+      opacity: 0;
+      animation: fadeUp 0.7s 1s ease forwards;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .hstat .num {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--cyan);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .hstat .lbl {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* floating badge */
+    .hero-badge {
+      position: absolute;
+      right: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeIn 1s 1.2s ease forwards;
+    }
+
+    .badge-ring {
+      width: 160px;
+      height: 160px;
+      border: 1px solid var(--border2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: rotateSlow 20s linear infinite;
+    }
+
+    .badge-ring::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+
+    .badge-inner {
+      text-align: center;
+      animation: rotateSlow 20s linear infinite reverse;
+    }
+
+    .badge-inner .icon {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .badge-inner span {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @keyframes rotateSlow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── ABOUT SECTION ── */
+    #about {
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-label::before {
+      content: attr(data-num);
+      color: var(--muted2);
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-text h2 {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    .about-skills h3 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .skill-item {}
+
+    .skill-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .skill-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .skill-pct {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--cyan);
+    }
+
+    .skill-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      border-radius: 2px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── PROJECTS ── */
+    #projects {
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: none;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-3px);
+    }
+
+    .project-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .project-card.featured {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .project-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted2);
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .ptag {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 3px 10px;
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .plink {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cyan);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+
+    .plink:hover {
+      gap: 10px;
+    }
+
+    /* terminal preview */
+    .terminal {
+      background: #080b16;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      background: var(--bg3);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tbar-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .tbar-dot:nth-child(1) {
+      background: #ff5f57;
+    }
+
+    .tbar-dot:nth-child(2) {
+      background: #febc2e;
+    }
+
+    .tbar-dot:nth-child(3) {
+      background: #28c840;
+    }
+
+    .terminal-body {
+      padding: 20px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: #8892b0;
+    }
+
+    .t-prompt {
+      color: var(--green);
+    }
+
+    .t-cmd {
+      color: var(--text);
+    }
+
+    .t-out {
+      color: #5a6490;
+    }
+
+    .t-hi {
+      color: var(--cyan);
+    }
+
+    .t-ok {
+      color: var(--green);
+    }
+
+    .t-warn {
+      color: var(--orange);
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience {
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .titem {
+      position: relative;
+      padding: 0 0 48px 40px;
+    }
+
+    .titem::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--border2);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .titem:hover::before {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+
+    .titem-date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .titem-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .titem-company {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .titem-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .titem-bullets {
+      list-style: none;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .titem-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .titem-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+      font-size: 10px;
+      top: 2px;
+    }
+
+    /* ── CERTIFICATIONS ── */
+    #certs {
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .cert-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      cursor: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cert-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0, 229, 255, 0.08);
+    }
+
+    .cert-card[data-img]:hover .cert-preview-hint {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cert-preview-hint {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 229, 255, 0.15));
+      padding: 20px 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .cert-preview-hint::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-top: 1px solid var(--cyan);
+      border-right: 1px solid var(--cyan);
+      transform: rotate(-45deg);
+      margin-top: 2px;
+    }
+
+    .cert-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .cert-icon {
+      font-size: 28px;
+    }
+
+    .cert-click-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 3px 8px;
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      background: rgba(0, 229, 255, 0.06);
+      color: var(--cyan);
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    .cert-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .cert-issuer {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .cert-year {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+    }
+
+    .cert-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 2px 8px;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      color: var(--green);
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-left: 8px;
+    }
+
+    /* ── CERT MODAL ── */
+    .cert-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(2, 4, 12, 0.92);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .cert-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .cert-modal {
+      position: relative;
+      max-width: 820px;
+      width: calc(100% - 48px);
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      overflow: hidden;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 229, 255, 0.1);
+    }
+
+    .cert-modal-overlay.open .cert-modal {
+      transform: scale(1) translateY(0);
+    }
+
+    /* modal top bar */
+    .cert-modal-bar {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cert-modal-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .modal-dot:nth-child(1) {
+      background: #ff5f57;
+    }
+
+    .modal-dot:nth-child(2) {
+      background: #febc2e;
+    }
+
+    .modal-dot:nth-child(3) {
+      background: #28c840;
+    }
+
+    .cert-modal-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .cert-modal-close {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      font-size: 16px;
+      cursor: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .cert-modal-close:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+
+    /* modal image area */
+    .cert-modal-img-wrap {
+      position: relative;
+      background: var(--bg);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cert-modal-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .cert-modal-img {
+      max-width: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 1;
+      border-radius: 2px;
+    }
+
+    .cert-modal-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 60px;
+      text-align: center;
+    }
+
+    .cert-modal-placeholder .ph-icon {
+      font-size: 56px;
+      opacity: 0.4;
+    }
+
+    .cert-modal-placeholder p {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 320px;
+    }
+
+    .cert-modal-placeholder code {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 3px;
+      color: var(--cyan);
+      font-size: 11px;
+    }
+
+    /* modal footer info */
+    .cert-modal-info {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .cert-modal-info-left h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .cert-modal-info-left p {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .cert-modal-info-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-modal-dl {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 8px 18px;
+      background: var(--cyan);
+      color: var(--bg);
+      border: none;
+      border-radius: 3px;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-modal-dl:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 229, 255, 0.3);
+    }
+
+    .btn-modal-verify {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 8px 18px;
+      background: transparent;
+      color: var(--cyan);
+      border: 1px solid var(--border2);
+      border-radius: 3px;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      cursor: none;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-modal-verify:hover {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+
+    /* zoom controls */
+    .cert-img-zoom-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      z-index: 2;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--muted);
+      background: rgba(5, 7, 15, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 4px 10px;
+      letter-spacing: 0.05em;
+    }
+
+    /* scan line animation on modal image */
+    .cert-modal-img-wrap::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.4), transparent);
+      animation: scanLine 3s ease-in-out infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    @keyframes scanLine {
+      0% {
+        top: -2px;
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 100px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .contact-inner {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-left h2 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .contact-left p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .clink {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text);
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: none;
+    }
+
+    .clink:hover {
+      border-color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+
+    .clink-icon {
+      font-size: 20px;
+    }
+
+    .clink-info h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .clink-info p {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* status indicator */
+    .status-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 24px;
+    }
+
+    .status-box h3 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .status-item:last-child {
+      border-bottom: none;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-green {
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease infinite;
+    }
+
+    .dot-yellow {
+      background: #ffd700;
+      box-shadow: 0 0 8px #ffd700;
+    }
+
+    .dot-cyan {
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.5
+      }
+    }
+
+    .status-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .status-val {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 2;
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-back {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      cursor: none;
+    }
+
+    .footer-back:hover {
+      color: var(--cyan);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px) {
+      nav {
+        padding: 16px 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      #hero {
+        padding: 100px 24px 60px;
+      }
+
+      .hero-badge {
+        display: none;
+      }
+
+      .hero-stats {
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      #about,
+      #projects,
+      #experience,
+      #certs,
+      #contact {
+        padding: 60px 24px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card.featured {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+      }
+
+      .certs-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 32px 24px;
+      }
+
+      footer {
+        padding: 24px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <div class="nav-logo">&gt; <span></span>Achmad Fadhil Ramadhan</div>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#certs">certs</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-tag" data-text="Available for opportunities">Network Engineer</div>
+    <h1 class="hero-name">
+      Fadhil<br><span class="line2">Ramadhan</span>
+    </h1>
+    <div class="hero-role">
+      <span>&gt; </span>
+      <span id="typeTarget"></span>
+      <span class="blink"></span>
+    </div>
+    <p class="hero-desc">
+      Passionate Network Engineer yang fokus membangun infrastruktur jaringan yang andal, aman, dan terdokumentasi
+      dengan baik. Sedang membangun portofolio dan personal brand di bidang networking.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">Lihat Projects</a>
+      <a href="#contact" class="btn-ghost">Hubungi Saya</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="num">3+</div>
+        <div class="lbl">Dummy Projects</div>
+      </div>
+      <div class="hstat">
+        <div class="num">2+</div>
+        <div class="lbl">Tahun Belajar</div>
+      </div>
+      <div class="hstat">
+        <div class="num">5+</div>
+        <div class="lbl">Teknologi</div>
+      </div>
+      <div class="hstat">
+        <div class="num">1</div>
+        <div class="lbl">Tujuan: Jadi NE Pro</div>
+      </div>
+    </div>
+
+    <!-- floating badge -->
+    <div class="hero-badge">
+      <div class="badge-ring">
+        <div class="badge-inner">
+          <span class="icon">🌐</span>
+          <span>Network<br>Engineer</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label" data-num="01">Tentang Saya</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h2>Membangun jaringan, satu konfigurasi dalam satu waktu.</h2>
+        <p>Saya adalah seorang Network Engineer yang sedang dalam perjalanan membangun karir di bidang infrastruktur
+          jaringan. Dengan latar belakang di [jurusan kamu], saya menguasai dasar-dasar Cisco IOS, Linux networking, dan
+          keamanan jaringan.</p>
+        <p>Saya percaya bahwa dokumentasi yang baik dan lab praktis adalah kunci untuk menjadi Network Engineer yang
+          handal. Itulah mengapa setiap project saya selalu disertai dokumentasi teknis yang lengkap.</p>
+        <p style="color:var(--cyan); font-family:var(--mono); font-size:13px; margin-top:8px;">&gt; Lokasi: Makassar,
+          Sulawesi Selatan 🇮🇩</p>
+      </div>
+      <div class="about-skills reveal">
+        <h3>Technical Skills</h3>
+        <div class="skill-list">
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">Cisco IOS / CLI</span><span class="skill-pct">70%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="70"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">Linux Networking</span><span class="skill-pct">65%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="65"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">VLAN / Trunking</span><span class="skill-pct">75%</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="75"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">Routing (OSPF, Static)</span><span
+                class="skill-pct">60%</span></div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="60"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">Network Security / ACL</span><span
+                class="skill-pct">55%</span></div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="55"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">Packet Tracer / GNS3</span><span
+                class="skill-pct">80%</span></div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="80"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-top"><span class="skill-name">Wireshark</span><span class="skill-pct">50%</span></div>
+            <div class="skill-bar">
+              <div class="skill-fill" data-w="50"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label" data-num="02">Projects</div>
+    <div class="projects-grid">
+
+      <!-- Featured project -->
+      <div class="project-card featured reveal">
+        <div>
+          <div class="project-num">Project 001 — Featured</div>
+          <h3 class="project-title">Simulasi Jaringan Kantor Kecil</h3>
+          <p class="project-desc">Membangun infrastruktur jaringan lengkap untuk perusahaan fiktif PT. Maju Bersama
+            dengan 3 departemen. Implementasi VLAN, inter-VLAN routing, DHCP, NAT, dan ACL dari nol menggunakan Cisco
+            Packet Tracer.</p>
+          <div class="project-tags">
+            <span class="ptag">Cisco Packet Tracer</span>
+            <span class="ptag">VLAN</span>
+            <span class="ptag">OSPF</span>
+            <span class="ptag">DHCP</span>
+            <span class="ptag">ACL</span>
+            <span class="ptag">NAT</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/usernamekamu" class="plink">→ GitHub</a>
+            <a href="#" class="plink">→ Dokumentasi</a>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="tbar-dot"></div>
+            <div class="tbar-dot"></div>
+            <div class="tbar-dot"></div>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-prompt">R-Kantor#</span> <span class="t-cmd">show ip route</span></div>
+            <div class="t-out">Codes: C-connected, S-static, O-OSPF</div>
+            <div>&nbsp;</div>
+            <div><span class="t-hi">C</span> <span class="t-cmd">192.168.10.0/24</span> <span class="t-out">via
+                Fa0/1.10</span></div>
+            <div><span class="t-hi">C</span> <span class="t-cmd">192.168.20.0/24</span> <span class="t-out">via
+                Fa0/1.20</span></div>
+            <div><span class="t-hi">C</span> <span class="t-cmd">192.168.30.0/24</span> <span class="t-out">via
+                Fa0/1.30</span></div>
+            <div><span class="t-hi">C</span> <span class="t-cmd">192.168.40.0/24</span> <span class="t-out">via
+                Fa0/1.40</span></div>
+            <div><span class="t-warn">S*</span> <span class="t-cmd">0.0.0.0/0</span> <span class="t-out">via
+                203.0.113.1</span></div>
+            <div>&nbsp;</div>
+            <div><span class="t-prompt">R-Kantor#</span> <span class="t-cmd">ping 192.168.20.1</span></div>
+            <div><span class="t-ok">!!!!! Success rate 100%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card reveal">
+        <div class="project-num">Project 002</div>
+        <h3 class="project-title">Network Monitoring Dashboard</h3>
+        <p class="project-desc">Setup monitoring jaringan menggunakan Zabbix di Linux Ubuntu Server. Memantau traffic,
+          availability, dan alert otomatis untuk 10 device simulasi.</p>
+        <div class="project-tags">
+          <span class="ptag">Linux</span>
+          <span class="ptag">Zabbix</span>
+          <span class="ptag">SNMP</span>
+          <span class="ptag">Grafana</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/usernamekamu" class="plink">→ GitHub</a>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card reveal">
+        <div class="project-num">Project 003</div>
+        <h3 class="project-title">VPN Server dengan WireGuard</h3>
+        <p class="project-desc">Implementasi VPN server menggunakan WireGuard di Linux. Konfigurasi site-to-site tunnel
+          dan remote access untuk 5 client simulasi.</p>
+        <div class="project-tags">
+          <span class="ptag">WireGuard</span>
+          <span class="ptag">Linux</span>
+          <span class="ptag">VPN</span>
+          <span class="ptag">iptables</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/usernamekamu" class="plink">→ GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label" data-num="03">Pengalaman</div>
+    <div class="timeline">
+
+      <div class="titem reveal">
+        <div class="titem-date">JAN 2024 — SEKARANG</div>
+        <h3 class="titem-title">Network Engineer (Belajar Mandiri)</h3>
+        <div class="titem-company">Self-Learning Journey</div>
+        <p class="titem-desc">Belajar secara mandiri dan membangun portofolio project jaringan menggunakan simulator
+          Cisco Packet Tracer dan lab Linux.</p>
+        <ul class="titem-bullets">
+          <li>Menyelesaikan 3 dummy project jaringan lengkap dengan dokumentasi teknis</li>
+          <li>Belajar konfigurasi Cisco IOS: VLAN, routing, ACL, DHCP, NAT</li>
+          <li>Membangun lab home menggunakan GNS3 dan VirtualBox</li>
+          <li>Membuat konten edukasi networking di TikTok untuk personal brand</li>
+        </ul>
+      </div>
+
+      <div class="titem reveal">
+        <div class="titem-date">GANTI DENGAN PENGALAMANMU</div>
+        <h3 class="titem-title">Posisi / Magang / Kerja Partime</h3>
+        <div class="titem-company">Nama Perusahaan / Instansi</div>
+        <p class="titem-desc">Deskripsikan pengalaman kerja atau magang kamu di sini. Fokus pada hal teknis yang kamu
+          lakukan dan dampaknya.</p>
+        <ul class="titem-bullets">
+          <li>Achievement atau tanggung jawab pertama</li>
+          <li>Achievement atau tanggung jawab kedua</li>
+          <li>Teknologi atau tools yang kamu gunakan</li>
+        </ul>
+      </div>
+
+      <div class="titem reveal">
+        <div class="titem-date">GANTI DENGAN PENDIDIKANMU</div>
+        <h3 class="titem-title">Nama Jurusan / Program Studi</h3>
+        <div class="titem-company">Nama Universitas / Sekolah</div>
+        <p class="titem-desc">Tulis jurusan, universitas, dan tahun lulus kamu. Boleh tambahkan IPK jika memuaskan, atau
+          project skripsi yang relevan.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERT MODAL -->
+  <div class="cert-modal-overlay" id="certModal">
+    <div class="cert-modal">
+      <div class="cert-modal-bar">
+        <div class="cert-modal-bar-left">
+          <div class="modal-dot"></div>
+          <div class="modal-dot"></div>
+          <div class="modal-dot"></div>
+        </div>
+        <span class="cert-modal-title" id="modalTitle">sertifikat.jpg</span>
+        <button class="cert-modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="cert-modal-img-wrap" id="modalImgWrap">
+        <!-- diisi JS -->
+      </div>
+      <div class="cert-modal-info">
+        <div class="cert-modal-info-left">
+          <h3 id="modalName">Nama Sertifikat</h3>
+          <p id="modalIssuer">Issuer · Tahun</p>
+        </div>
+        <div class="cert-modal-info-right">
+          <a href="#" class="btn-modal-verify" id="modalVerify" target="_blank">↗ Verifikasi</a>
+          <a href="#" class="btn-modal-dl" id="modalDl" download>↓ Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CERTS -->
+  <section id="certs">
+    <div class="section-label" data-num="04">Sertifikasi & Pencapaian</div>
+    <p
+      style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:24px;display:flex;align-items:center;gap:8px;">
+      <span style="color:var(--cyan)">▸</span> Klik kartu untuk lihat sertifikat
+    </p>
+    <div class="certs-grid">
+
+      <!--
+      CARA MENAMBAH GAMBAR SERTIFIKAT:
+      1. Simpan file gambar sertifikat di folder yang sama dengan file HTML ini
+         Contoh: sertifikat-cisco.jpg, sertifikat-linux.png, ijazah.jpg
+      2. Pada setiap cert-card, tambahkan:
+         data-img="nama-file.jpg"          ← path ke file gambar
+         data-dl="nama-file.jpg"           ← untuk tombol download (bisa sama)
+         data-verify="https://link..."     ← link verifikasi (Credly, NetAcad, dll)
+      3. Simpan, buka di browser. Klik kartu = gambar muncul sebagai popup!
+    -->
+
+      <div class="cert-card reveal" data-img="tes.jpg" data-dl="tes.jpg" data-name="Cisco Packet Tracer"
+        data-issuer="Cisco Networking Academy · 2024" data-verify="https://www.netacad.com/verify">
+        <div class="cert-card-top">
+          <div class="cert-icon">🏆</div>
+          <span class="cert-click-badge">klik lihat</span>
+        </div>
+        <div class="cert-name">Cisco Packet Tracer <span class="cert-badge">Done</span></div>
+        <div class="cert-issuer">Cisco Networking Academy</div>
+        <div class="cert-year">2024</div>
+        <div class="cert-preview-hint">▸ lihat sertifikat</div>
+      </div>
+
+      <div class="cert-card reveal" data-img="" data-name="CCNA 200-301" data-issuer="Cisco Systems · Target 2025"
+        data-verify="https://www.credly.com">
+        <div class="cert-card-top">
+          <div class="cert-icon">📜</div>
+          <span class="cert-click-badge" style="border-color:rgba(255,107,43,0.3);color:var(--orange)">coming
+            soon</span>
+        </div>
+        <div class="cert-name">CCNA 200-301 <span class="cert-badge"
+            style="border-color:rgba(255,107,43,0.4);color:var(--orange)">In Progress</span></div>
+        <div class="cert-issuer">Cisco Systems</div>
+        <div class="cert-year">Target 2025</div>
+        <div class="cert-preview-hint">▸ belum tersedia</div>
+      </div>
+
+      <div class="cert-card reveal" data-img="sertifikat-linux.jpg" data-dl="sertifikat-linux.jpg"
+        data-name="Linux Essentials" data-issuer="Nama Institusi · Tahun" data-verify="">
+        <div class="cert-card-top">
+          <div class="cert-icon">🐧</div>
+          <span class="cert-click-badge">klik lihat</span>
+        </div>
+        <div class="cert-name">Linux Essentials</div>
+        <div class="cert-issuer">Ganti Nama Institusi</div>
+        <div class="cert-year">Ganti Tahun</div>
+        <div class="cert-preview-hint">▸ lihat sertifikat</div>
+      </div>
+
+      <div class="cert-card reveal" data-img="sertifikat-4.jpg" data-dl="sertifikat-4.jpg"
+        data-name="Nama Sertifikat Kamu" data-issuer="Penerbit · Tahun" data-verify="">
+        <div class="cert-card-top">
+          <div class="cert-icon">🎓</div>
+          <span class="cert-click-badge">klik lihat</span>
+        </div>
+        <div class="cert-name">Nama Sertifikat Kamu</div>
+        <div class="cert-issuer">Penerbit / Issuer</div>
+        <div class="cert-year">Tahun</div>
+        <div class="cert-preview-hint">▸ lihat sertifikat</div>
+      </div>
+
+      <div class="cert-card reveal" data-img="sertifikat-5.jpg" data-dl="sertifikat-5.jpg"
+        data-name="Nama Sertifikat Kamu" data-issuer="Penerbit · Tahun" data-verify="">
+        <div class="cert-card-top">
+          <div class="cert-icon">📋</div>
+          <span class="cert-click-badge">klik lihat</span>
+        </div>
+        <div class="cert-name">Nama Sertifikat Kamu</div>
+        <div class="cert-issuer">Penerbit / Issuer</div>
+        <div class="cert-year">Tahun</div>
+        <div class="cert-preview-hint">▸ lihat sertifikat</div>
+      </div>
+
+      <div class="cert-card reveal" data-img="ijazah.jpg" data-dl="ijazah.jpg" data-name="Ijazah / Gelar Kamu"
+        data-issuer="Nama Universitas · Tahun Lulus" data-verify="">
+        <div class="cert-card-top">
+          <div class="cert-icon">⭐</div>
+          <span class="cert-click-badge">klik lihat</span>
+        </div>
+        <div class="cert-name">Ijazah / Gelar Kamu</div>
+        <div class="cert-issuer">Nama Universitas / Sekolah</div>
+        <div class="cert-year">Tahun Lulus</div>
+        <div class="cert-preview-hint">▸ lihat sertifikat</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label" data-num="05">Kontak</div>
+    <div class="contact-inner reveal">
+      <div class="contact-left">
+        <h2>Mari Terhubung</h2>
+        <p>Saya terbuka untuk peluang kerja, kolaborasi project, atau sekadar ngobrol soal networking. Jangan ragu untuk
+          menghubungi!</p>
+        <div class="contact-links">
+          <a href="mailto:fadhilsdit5abu@gmail.com" class="clink">
+            <span class="clink-icon">✉️</span>
+            <div class="clink-info">
+              <h4>Email</h4>
+              <p>fadhilsdit5abu@gmail.com</p>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/achmad-fadhil-ramadhan-2463b93b6/" class="clink">
+            <span class="clink-icon">💼</span>
+            <div class="clink-info">
+              <h4>LinkedIn</h4>
+              <p>linkedin.com/in/achmad-fadhil-ramadhan</p>
+            </div>
+          </a>
+          <a href="https://github.com/adiel-git" class="clink">
+            <span class="clink-icon">🐙</span>
+            <div class="clink-info">
+              <h4>GitHub</h4>
+              <p>github.com/adiel-git</p>
+            </div>
+          </a>
+          <a href="https://tiktok.com/@faadhillll_" class="clink">
+            <span class="clink-icon">🎵</span>
+            <div class="clink-info">
+              <h4>TikTok</h4>
+              <p>@faadhillll_</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="status-box">
+          <h3>// Current Status</h3>
+          <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <span class="status-label">Open to opportunities</span>
+            <span class="status-val">AKTIF</span>
+          </div>
+          <div class="status-item">
+            <div class="status-dot dot-cyan"></div>
+            <span class="status-label">Belajar CCNA</span>
+            <span class="status-val">IN PROGRESS</span>
+          </div>
+          <div class="status-item">
+            <div class="status-dot dot-cyan"></div>
+            <span class="status-label">Membangun projects</span>
+            <span class="status-val">IN PROGRESS</span>
+          </div>
+          <div class="status-item">
+            <div class="status-dot dot-yellow"></div>
+            <span class="status-label">Lokasi</span>
+            <span class="status-val">Makassar, ID</span>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;" class="terminal">
+          <div class="terminal-bar">
+            <div class="tbar-dot"></div>
+            <div class="tbar-dot"></div>
+            <div class="tbar-dot"></div>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-prompt">visitor@portfolio:~$</span> <span class="t-cmd">ping fadhil.dev</span></div>
+            <div class="t-out">PING fadhil.dev: 56 bytes of data</div>
+            <div><span class="t-ok">64 bytes: icmp_seq=1 ttl=64 time=1ms</span></div>
+            <div><span class="t-ok">64 bytes: icmp_seq=2 ttl=64 time=1ms</span></div>
+            <div><span class="t-ok">--- 100% packet success ---</span></div>
+            <div>&nbsp;</div>
+            <div><span class="t-prompt">visitor@portfolio:~$</span> <span class="t-cmd">_</span><span class="blink"
+                style="display:inline-block;width:8px;height:14px;background:var(--green);vertical-align:middle;animation:blink 1s step-end infinite;"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-copy">© 2026 Achmad Fadhil Ramadhan — Network Engineer Portfolio</p>
+    <a href="#hero" class="footer-back">↑ back_to_top</a>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script>
+    // ── Cursor ──
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+    document.querySelectorAll('a,button,.project-card,.cert-card,.clink').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.style.width = '16px'; cursor.style.height = '16px'; ring.style.width = '48px'; ring.style.height = '48px'; });
+      el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.width = '32px'; ring.style.height = '32px'; });
+    });
+
+    // ── Nav scroll ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Typewriter ──
+    const phrases = [
+      'Network Engineer (Junior)',
+      'Cisco Packet Tracer Enthusiast',
+      'Linux Networking Learner',
+      'Building Portfolio & Personal Brand',
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    const target = document.getElementById('typeTarget');
+    function type() {
+      const phrase = phrases[pi];
+      if (!deleting) {
+        target.textContent = phrase.slice(0, ci + 1);
+        ci++;
+        if (ci === phrase.length) { deleting = true; setTimeout(type, 1800); return; }
+      } else {
+        target.textContent = phrase.slice(0, ci - 1);
+        ci--;
+        if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+      }
+      setTimeout(type, deleting ? 40 : 80);
+    }
+    type();
+
+    // ── Cert Modal ──
+    const overlay = document.getElementById('certModal');
+    const modalClose = document.getElementById('modalClose');
+    const modalImgWrap = document.getElementById('modalImgWrap');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalName = document.getElementById('modalName');
+    const modalIssuer = document.getElementById('modalIssuer');
+    const modalDl = document.getElementById('modalDl');
+    const modalVerify = document.getElementById('modalVerify');
+
+    function openModal(card) {
+      const img = card.dataset.img || '';
+      const dl = card.dataset.dl || '';
+      const name = card.dataset.name || 'Sertifikat';
+      const issuer = card.dataset.issuer || '';
+      const verify = card.dataset.verify || '';
+
+      modalTitle.textContent = img ? img : 'sertifikat';
+      modalName.textContent = name;
+      modalIssuer.textContent = issuer;
+
+      // download button
+      if (dl) {
+        modalDl.href = dl;
+        modalDl.setAttribute('download', dl);
+        modalDl.style.display = 'flex';
+      } else {
+        modalDl.style.display = 'none';
+      }
+
+      // verify button
+      if (verify) {
+        modalVerify.href = verify;
+        modalVerify.style.display = 'flex';
+      } else {
+        modalVerify.style.display = 'none';
+      }
+
+      // image or placeholder
+      if (img) {
+        modalImgWrap.innerHTML = `
+      <img src="${img}" alt="${name}" class="cert-modal-img"
+           onerror="this.outerHTML='<div class=cert-modal-placeholder><div class=ph-icon>🖼️</div><p>File gambar <code>${img}</code> tidak ditemukan.<br>Pastikan file ada di folder yang sama dengan index.html</p></div>'"
+      />
+      <div class="cert-img-zoom-hint">scroll to zoom · click to close</div>
+    `;
+      } else {
+        modalImgWrap.innerHTML = `
+      <div class="cert-modal-placeholder">
+        <div class="ph-icon">⏳</div>
+        <p>Sertifikat ini belum tersedia.<br>Tambahkan file gambar dengan mengisi <code>data-img="nama-file.jpg"</code> pada kartu ini.</p>
+      </div>
+    `;
+      }
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => { modalImgWrap.innerHTML = ''; }, 300);
+    }
+
+    // open on cert card click
+    document.querySelectorAll('.cert-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card));
+    });
+
+    // close triggers
+    modalClose.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // prevent modal content clicks from closing
+    document.querySelector('.cert-modal').addEventListener('click', e => e.stopPropagation());
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          // trigger skill bars
+          if (e.target.classList.contains('about-skills')) {
+            e.target.querySelectorAll('.skill-fill').forEach(bar => {
+              bar.style.width = bar.dataset.w + '%';
+            });
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .about-skills').forEach(el => obs.observe(el));
+  </script>
+</body>
+
+</html>
